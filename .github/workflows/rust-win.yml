@@ -42,7 +42,7 @@ jobs:
         with:
           command: fmt
           args: --all -- --check
-      - name: fmt
+      - name: clippy
         uses: actions-rs/cargo@v1
         with:
           command: clippy
