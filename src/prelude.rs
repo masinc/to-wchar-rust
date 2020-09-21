@@ -1,1 +1,1 @@
-pub use super::{ToWchar, FromWchar};
+pub use super::{FromWchar, ToWchar};

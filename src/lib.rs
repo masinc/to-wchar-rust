@@ -46,7 +46,9 @@ impl FromWchar for [u16] {
     #[inline]
     fn from_wchar(&self) -> Result<String, OsString> {
         use std::os::windows::ffi::OsStringExt;
-        OsString::from_wide(self).into_string().map(|x| x.trim_end_matches('\0').into())
+        OsString::from_wide(self)
+            .into_string()
+            .map(|x| x.trim_end_matches('\0').into())
     }
 }
 
@@ -65,9 +67,6 @@ mod tests {
     fn test_from_wchar() {
         use super::FromWchar;
         let a: Vec<u16> = vec![0x0048, 0x0045, 0x004C, 0x004C, 0x004F, 0x0000];
-        assert_eq!(
-            a.from_wchar().unwrap(),
-            "HELLO"
-        )
+        assert_eq!(a.from_wchar().unwrap(), "HELLO")
     }
 }
