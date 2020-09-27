@@ -11,7 +11,7 @@
 //! assert_eq!(hello_s.to_wchar(), vec![0x0048, 0x0045, 0x004C, 0x004C, 0x004F, 0x0000]);
 //!
 //! let hello_v: Vec<u16> = vec![0x0048, 0x0045, 0x004C, 0x004C, 0x004F, 0x0000];
-//! assert_eq!(hello_v.from_wchar(), Ok("HELLO".into()));
+//! assert_eq!(String::from_wchar(&hello_v), Ok("HELLO".into()));
 //! ```
 //!
 //! [`ToWchar`]: trait.ToWchar.html
@@ -39,15 +39,16 @@ impl ToWchar for str {
 /// From wchar(utf-16) trait to a `String`
 pub trait FromWchar {
     /// Convert a wchar(utf-16) to a `String`.
-    fn from_wchar(&self) -> Result<String, OsString>;
+    fn from_wchar(wchar: &[u16]) -> Result<String, OsString>;
 }
 
-impl FromWchar for [u16] {
+#[cfg(windows)]
+impl FromWchar for String {
     /// Convert a wchar(utf-16) array to a `String`.
     #[inline]
-    fn from_wchar(&self) -> Result<String, OsString> {
+    fn from_wchar(wchar: &[u16]) -> Result<String, OsString> {
         use std::os::windows::ffi::OsStringExt;
-        OsString::from_wide(self)
+        OsString::from_wide(wchar)
             .into_string()
             .map(|x| x.trim_end_matches('\0').into())
     }
@@ -68,6 +69,6 @@ mod tests {
     fn test_from_wchar() {
         use super::FromWchar;
         let a: Vec<u16> = vec![0x0048, 0x0045, 0x004C, 0x004C, 0x004F, 0x0000];
-        assert_eq!(a.from_wchar().unwrap(), "HELLO")
+        assert_eq!(String::from_wchar(&a).unwrap(), "HELLO")
     }
 }
