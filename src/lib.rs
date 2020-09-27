@@ -26,6 +26,7 @@ pub trait ToWchar {
     fn to_wchar(&self) -> Vec<u16>;
 }
 
+#[cfg(windows)]
 impl ToWchar for str {
     /// Convert a string into a wchar(utf-16) `Vec`.
     #[inline]
