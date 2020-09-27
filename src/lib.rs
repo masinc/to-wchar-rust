@@ -30,8 +30,9 @@ impl ToWchar for str {
     /// Convert a string into a wchar(utf-16) `Vec`.
     #[inline]
     fn to_wchar(&self) -> Vec<u16> {
+        use std::iter::once;
         use std::os::windows::ffi::OsStrExt;
-        OsStr::new(&self).encode_wide().chain(Some(0)).collect()
+        OsStr::new(&self).encode_wide().chain(once(0)).collect()
     }
 }
 
